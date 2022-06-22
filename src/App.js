@@ -38,7 +38,7 @@ function App() {
                 value: ethers.utils.parseEther('.01')
             });
             console.log(tx);
-            setTransactionHash(<a href={`https://${provider.network.name}.etherscan.io/tx/${tx.hash}`}>{tx.hash}</a>);
+            setTransactionHash(<a target="_blank" href={`https://${provider.network.name}.etherscan.io/tx/${tx.hash}`}>{tx.hash}</a>);
         } catch (error) {
             if (error.code === 4001) {
                 setTransactionHash('User rejected transaction');
