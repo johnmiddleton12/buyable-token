@@ -16,6 +16,8 @@ function App() {
     const [address, setAddress] = useState('');
     const [balance, setBalance] = useState(0);
 
+    const [transactionHash, setTransactionHash] = useState('');
+
     async function connectToWallet() {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const accounts = await provider .send('eth_requestAccounts', []);
@@ -31,10 +33,20 @@ function App() {
         const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 
         // call buyToken, sending 1 ether in the transaction
-        const tx = await contract.buyToken({
-            value: ethers.utils.parseEther('.01')
-        });
-        console.log(tx);
+        try { 
+            const tx = await contract.buyToken({
+                value: ethers.utils.parseEther('.01')
+            });
+            console.log(tx);
+            setTransactionHash(<a href={`https://${provider.network.name}.etherscan.io/tx/${tx.hash}`}>{tx.hash}</a>);
+        } catch (error) {
+            if (error.code === 4001) {
+                setTransactionHash('User rejected transaction');
+            } else {
+                setTransactionHash('Transaction failed');
+            }
+            console.log(error);
+        }
 
     }
 
@@ -52,18 +64,10 @@ function App() {
         <p>
         Your balance: {balance}
         </p>
-        <p>
-        Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <button onClick={makeTransaction}>Make transaction</button>
-        <a
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-        >
-        Learn React
-        </a>
+        <button onClick={makeTransaction}>Buy Token</button>
+
+        {transactionHash ? <p>Transaction hash: {transactionHash}</p> : <p></p>}
+
         </header>
         </div>
     );
