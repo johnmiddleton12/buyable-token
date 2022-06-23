@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { ethers } from "ethers";
 
-const CONTRACT_ADDRESS = '0xb5aC181F8C523B784e401ea31Bca89bfc5d4f283';
+const CONTRACT_ADDRESS = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 
 const CONTRACT_ABI = [
     "function buyToken() public virtual payable"
